@@ -167,6 +167,17 @@ require([
         var content = editor.getModel().getText();
         var results = eslint.verify(content, OPTIONS);
         displayResults(results);
+        editor.showProblems(results.map(function(error) {
+            var start = error.column + 1;
+            var end = start + 1; // TODO: use end range of the relevant node or token
+            return {
+                line: error.line,
+                start: start,
+                end: end,
+                description: error.message,
+                severity: error.severity === 1 ? "error" : "warning"
+            };
+        }));
     }, 500);
 
     verify();
