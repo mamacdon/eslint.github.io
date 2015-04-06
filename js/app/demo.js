@@ -167,6 +167,15 @@ require([
         var content = editor.getModel().getText();
         var results = eslint.verify(content, OPTIONS);
         displayResults(results);
+        editor.showProblems(results.map(function(error) {
+            return {
+                line: error.line,
+                start: error.column + 1,
+                end: error.column + 2,
+                description: error.message,
+                severity: error.severity === 1 ? "error" : "warning"
+            };
+        }));
     }, 500);
 
     verify();
